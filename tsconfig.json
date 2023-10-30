@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "baseUrl": "./api",
+    "rootDir": "./api"
+    /* ... your props ... */
+  },
+  "ts-node": {
+    "esm": true
+  },
+}
