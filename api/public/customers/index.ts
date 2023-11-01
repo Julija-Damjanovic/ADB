@@ -1,6 +1,6 @@
 import { request, response, Router } from "express";
 import Customer from "../../models/Customer";
-
+import ProfileRoutes from "./profile";
 const router = Router();
 
 router.get("/", async (req: request, res: response) => {
@@ -27,6 +27,9 @@ router.post("/", async (req: request, res: response) => {
   });
 });
 
+
+
+
 router.put("/:id", async (req: request, res: response) => {
   const data = await Customer.update(req.body, {
     where: {
@@ -49,4 +52,6 @@ router.delete("/:id", async (req: request, res: response) => {
   });
 });
 
+
+router.use('./profile',ProfileRoutes);
 export default router;
