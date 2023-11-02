@@ -1,7 +1,13 @@
 import { request, response, Router } from "express";
 import Customer from "../../../models/Customer";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+import {TOKEN_KEY,regex} from "../../../secret_key";
+
 const router = Router();
+
+
+
 
 router.post("/register", async (req, res) => {
   // Our register logic starts here
@@ -10,9 +16,14 @@ router.post("/register", async (req, res) => {
 
     // Validate customer input
     if (!(username && email && password )) {
-      res.status(400).send("All input is required(username,email, password )");
+     return  res.status(400).send("All input is required(username,email, password )");
     }
 
+    //validation email
+    if(!regex.test(email)){
+      return res.status(400).send("Email is not valid");
+    }
+    
     // check if Customer already exist
     // Validate if Customer exist in our database
     const oldCustomer = await Customer.findOne({
@@ -34,8 +45,18 @@ router.post("/register", async (req, res) => {
     })) as any;
     console.log(customer);
   
-    // return new customer
-    res.json(customer);
+      // Create token
+      const token = jwt.sign(
+        { auth_id: customer.id, email, type: "customer" },
+        TOKEN_KEY,
+        {
+          expiresIn: "1h",
+        }
+      );
+  
+      const result = { ...customer, ...{ token: token } };
+      // return new customer
+      res.json(result);
  
 });
 
@@ -48,12 +69,29 @@ router.post("/login", async (req, res) => {
 
 // Validate customer input
       if (!( email && password)) {
-         res.status(400).send("All input is required(email && password)");
+      return   res.status(400).send("All input is required(email && password)");
        }
-       const customer = await Customer.findOne({
-       where: { email:email }});
-              
-       res.status(200).json({result: customer,message :'Sve je ok!'});
+      // Validate if customer exist in our database
+    const customer = (await Customer.findOne({
+      where: { email: req.body.email },
+    })) as any;
+
+    //Check password and create token
+    if (customer && (await bcrypt.compare(password, customer.password))) {
+      
+      const token = jwt.sign(
+        { auth_id: customer.id, email, type: "customer" },
+        TOKEN_KEY,
+        {
+          expiresIn: "1h",
+        }
+      );
+
+      const result = { token: token };
+      // customer
+    return res.json(result);
+    }
+   return res.status(400).send("Invalid Credentials");
   }catch(error) {
     console.log(error);
   }

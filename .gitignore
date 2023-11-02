@@ -4,3 +4,4 @@ config
 package-lock.json
 package.json 
 tsconfig.json 
+secret_key.ts
