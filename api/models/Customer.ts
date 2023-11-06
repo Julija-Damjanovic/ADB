@@ -1,4 +1,4 @@
-import {connection, DataTypes} from "../db";
+import { connection, DataTypes } from "../db";
 
 const Customer = connection.define(
   "Customer",
@@ -7,16 +7,20 @@ const Customer = connection.define(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
- 
+
     },
     is_active: {
       type: DataTypes.BOOLEAN,
       //
     },
+    email: {
+      type: DataTypes.STRING,
+      unique: true,
+    },
 
-      password: {
-        type: DataTypes.STRING(64),
-      },
+    password: {
+      type: DataTypes.STRING(64),
+    },
   },
   {
     // Other model options go here
