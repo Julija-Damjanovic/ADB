@@ -13,10 +13,7 @@ const Customer = connection.define(
       type: DataTypes.BOOLEAN,
       //
     },
-    email: {
-      type: DataTypes.STRING,
-      // allowNull defaults to true
-    },
+
       password: {
         type: DataTypes.STRING(64),
       },
