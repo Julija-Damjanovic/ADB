@@ -3,6 +3,7 @@ import Customer from "../../../models/Customer";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import {TOKEN_KEY,regex} from "../../../secret_key";
+import auth from "../../../auth"
 
 const router = Router();
 
@@ -97,6 +98,9 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/welcome", auth,async (req: request, res: response) => {
+  res.status(200).send("Welcome 🙌 ");
+});
 
 
 export default router;
