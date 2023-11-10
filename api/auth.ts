@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-import {TOKEN_KEY} from "../api/secret_key"
+import { TOKEN_KEY } from "../api/secret_key"
 
 const verifyToken = (req, res, next) => {
   const token =
@@ -17,4 +17,29 @@ const verifyToken = (req, res, next) => {
   }
   return next();
 };
+
+
+export const refreshToken = (req, res) => {
+  const oldToken = req.body.refreshToken;
+  if (!oldToken) {
+    return res.status(403).send("A token is required for authentication");
+  }
+  try {
+    const user = jwt.verify(oldToken, TOKEN_KEY);
+    const { token, refreshToken } = createToken({ user_id: user.user_id, email: user.email });
+    res.json(token);
+  } catch (error) {
+    return res.status(401).send("Invalid Token");
+  }
+};
+
+export const createToken = (user) => {
+  const token = jwt.sign(user, TOKEN_KEY, { expiresIn: "30m" });
+  const refreshToken = jwt.sign(user, TOKEN_KEY, { expiresIn: "24h" });
+  return { token, refreshToken }
+}
+
+
+
+
 export default verifyToken;
