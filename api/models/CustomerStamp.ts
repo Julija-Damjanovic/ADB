@@ -14,5 +14,5 @@ const CustomerStamp = connection.define(
     // Other model options go here
   }
 );
-CustomerStamp.sync();
+//CustomerStamp.sync();
 export default CustomerStamp;

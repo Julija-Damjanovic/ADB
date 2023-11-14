@@ -104,10 +104,13 @@ DeliveryDays.belongsTo(Maker);
 
 
 /*CustomersStamps*/  
-  Customer.belongsToMany(Reward,{through: CustomerStamp});
-  Reward.belongsToMany(Customer,{through: CustomerStamp});
+/*Customers.id < CustomerStamps.customer_id*/
+Customer.hasMany(CustomerStamp);
+CustomerStamp.belongsTo(Customer);
 
-
+/*Rewards.id < CustomersStamps.reward_id*/
+Reward.hasMany(CustomerStamp);
+CustomerStamp.belongsTo(Reward);
 
 
   /**discount_products */
