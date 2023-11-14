@@ -1,10 +1,11 @@
 import { request, response, Router } from "express";
 import Customer from "../../../models/Customer";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import { TOKEN_KEY, regex } from "../../../secret_key";
 import auth from "../../../auth"
 import { createToken, refreshToken } from "../../../auth";
+import { refreshTokens } from "../../../auth";
+
 
 const router = Router();
 
@@ -49,7 +50,7 @@ router.post("/register", async (req, res) => {
 
   // Create token and refreshToken 
   const { token, refreshToken } = createToken({ user_id: customer.id, email });
-
+  refreshTokens.push(refreshToken);
   const result = { ...customer, ...{ token, refreshToken } };
   // return new customer
   res.json(result);
@@ -78,6 +79,7 @@ router.post("/login", async (req, res) => {
       //create token and refreshToken        
       const { token, refreshToken } = createToken({ user_id: customer.id, email });
 
+      refreshTokens.push(refreshToken);
       const result = { token, refreshToken };
       // customer
       return res.json(result);
@@ -103,4 +105,11 @@ router.get("/profile", auth, async (req: request, res: response) => {
 router.post("/refresh", async (req: request, res: response) => {
   refreshToken(req, res);
 });
+//route for logout
+router.delete('/logout', (req, res) => {
+  refreshTokens.filter(token => token !== req.body.token);
+  res.json({ result: 204, message: "successfully log out" });
+})
+
+
 export default router;

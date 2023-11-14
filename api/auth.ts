@@ -2,6 +2,9 @@ import jwt from "jsonwebtoken";
 
 import { TOKEN_KEY } from "../api/secret_key"
 
+
+ let refreshTokens=[];
+
 const verifyToken = (req, res, next) => {
   const token =
     req.body.token || req.query.token || req.headers["x-access-token"];
@@ -32,6 +35,7 @@ export const refreshToken = (req, res) => {
   try {
     const user = jwt.verify(oldToken, TOKEN_KEY);
     const { token, refreshToken } = createToken({ user_id: user.user_id, email: user.email });
+    refreshTokens.push(refreshToken);
     res.json(token);
   } catch (error) {
     return res.status(401).send("Invalid Token");
@@ -45,6 +49,5 @@ export const createToken = (user) => {
 }
 
 
-
-
+export {refreshTokens};
 export default verifyToken;
