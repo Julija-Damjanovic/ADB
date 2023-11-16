@@ -25,8 +25,7 @@ router.get("/", auth, async (req: request, res: response) => {
 
   });
 
-
-  res.status(200).json(data);
+  res.status(200).json(JSON.parse(JSON.stringify(data)).ammount);
 });
 
 
