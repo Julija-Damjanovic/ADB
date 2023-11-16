@@ -22,5 +22,5 @@ const Reward = connection.define(
     // Other model options go here
   }
 );
-Reward.sync();
+//Reward.sync();
 export default Reward;
