@@ -27,7 +27,7 @@ app.listen(8000, async () => {
   await connectDB();
  await setModelRelations();
  // connection.sync({ force: false }).
-  connection.sync({ }).then(() => {
+  connection.sync({ force: false}).then(() => {
     console.log("✅Synced database successfully...");
   });
 });
