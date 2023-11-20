@@ -34,7 +34,7 @@ export const refreshToken = (req, res) => {
   }
 
   if(!refreshTokens.includes(oldToken)){
-    return res.status(403).send("please sign up");
+    return res.status(403).send("please login or sign up ");
   }
 
   try {
