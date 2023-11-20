@@ -41,7 +41,7 @@ export const refreshToken = (req, res) => {
     const user = jwt.verify(oldToken, TOKEN_KEY);
     const { token, refreshToken } = createToken({ user_id: user.user_id, email: user.email });
     refreshTokens = refreshTokens.filter(oldToken => token !== oldToken);
-    refreshTokens.push(token);
+    refreshTokens.push(refreshToken);
     res.json(token);
   } catch (error) {
     return res.status(401).send("Invalid Token");
@@ -49,7 +49,7 @@ export const refreshToken = (req, res) => {
 };
 
 export const createToken = (user) => {
-  const token = jwt.sign(user, TOKEN_KEY, { expiresIn: "3m" });
+  const token = jwt.sign(user, TOKEN_KEY, { expiresIn: "30m" });
   const refreshToken = jwt.sign(user, TOKEN_KEY, { expiresIn: "24h" });
   return { token, refreshToken }
 }
