@@ -32,10 +32,16 @@ export const refreshToken = (req, res) => {
   if (!oldToken) {
     return res.status(403).send("A token is required for authentication");
   }
+
+  if(!refreshTokens.includes(oldToken)){
+    return res.status(403).send("please sign up");
+  }
+
   try {
     const user = jwt.verify(oldToken, TOKEN_KEY);
     const { token, refreshToken } = createToken({ user_id: user.user_id, email: user.email });
-    refreshTokens.push(refreshToken);
+    refreshTokens = refreshTokens.filter(oldToken => token !== oldToken);
+    refreshTokens.push(token);
     res.json(token);
   } catch (error) {
     return res.status(401).send("Invalid Token");
@@ -43,7 +49,7 @@ export const refreshToken = (req, res) => {
 };
 
 export const createToken = (user) => {
-  const token = jwt.sign(user, TOKEN_KEY, { expiresIn: "30m" });
+  const token = jwt.sign(user, TOKEN_KEY, { expiresIn: "3m" });
   const refreshToken = jwt.sign(user, TOKEN_KEY, { expiresIn: "24h" });
   return { token, refreshToken }
 }
