@@ -6,6 +6,7 @@ import CustomersRoutes from "./customers";
 import AttributesRoutes from "./attributes";
 import productCategory from "./products_category";
 import CustomerStampsRoutes from "./customersStamps";
+import RewardsRoutes from "./rewards";
 const router = Router();
 
 router.use("/products", ProductsRoutes);
@@ -15,6 +16,7 @@ router.use("/customers", CustomersRoutes);
 router.use("/productCategories", productCategory);
 router.use("/attributes", AttributesRoutes);
 router.use("/customersStamps", CustomerStampsRoutes);
+router.use("/rewards",RewardsRoutes);
 // add other routes...
 
 export default router;
