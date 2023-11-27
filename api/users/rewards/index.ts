@@ -1,7 +1,6 @@
 import { request, response, Router } from "express";
 import Reward from "../../models/Reward";
 
-
 const router = Router();
 
 router.get("/", async (req: request, res: response) => {
@@ -22,16 +21,16 @@ router.get("/:id", async (req: request, res: response) => {
 });
 
 router.post("/", async (req: request, res: response) => {
-    const { is_active, stamp_ammount_needed, max_use_ammount, expires } = req.body;
-    const data = await Reward.create({ is_active, stamp_ammount_needed, max_use_ammount, expires });
+    const { is_active, stamp_ammount_needed, max_use_ammount, expires, MakerId, DiscountId } = req.body;
+    const data = await Reward.create({ is_active, stamp_ammount_needed, max_use_ammount, expires, MakerId, DiscountId });
     res.json({
         result: data,
     });
 });
 
 router.put("/:id", async (req: request, res: response) => {
-    const { is_active, stamp_ammount_needed, max_use_ammount, expires } = req.body;
-    const data = await Reward.update({ is_active, stamp_ammount_needed, max_use_ammount, expires }, {
+    const { is_active, stamp_ammount_needed, max_use_ammount, expires, MakerId, DiscountId } = req.body;
+    const data = await Reward.update({ is_active, stamp_ammount_needed, max_use_ammount, expires, MakerId, DiscountId }, {
         where: {
             id: req.params.id,
         },
