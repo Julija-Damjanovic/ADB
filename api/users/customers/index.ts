@@ -2,7 +2,6 @@ import { request, response, Router } from "express";
 import Customer from "../../models/Customer";
 import CustomerStamp from "../../models/CustomerStamp";
 import Reward from "../../models/Reward";
-import Attribute from "models/Attributes";
 
 const router = Router();
 
@@ -25,7 +24,7 @@ router.get("/:id", async (req: request, res: response) => {
     where: { id: req.authEntety.user_id },
     include: {
       model: CustomerStamp,
-     
+
       include: [{
         model: Reward,
       }]
@@ -38,18 +37,46 @@ router.get("/:id", async (req: request, res: response) => {
 });
 
 router.post("/", async (req: request, res: response) => {
-  console.log(req.body);
-  const data = await Customer.create(req.body,
-    {
-      include: {
-        model: CustomerStamp,
-        include: [{
-          model: Reward,
-        }]
+  const {
+    id,
+    username,
+    email,
+    password,
+    customerStamps: [
+      //@ts-ignore
+      { ammount, CustomerId, RewardId,
+        Reward: { idR, is_active, stamp_ammount_needed, max_use_ammount, expires } }
+    ],
+  } = req.body;
+  const customer = Customer.create({
+    id,
+    username,
+    email,
+    password,
+    customerStamps: [
+      {
+        ammount, CustomerId, RewardId,
+        Reward: { idR, is_active, stamp_ammount_needed, max_use_ammount, expires }
       }
+    ]
+  }, {
+    include: [{
+      model: CustomerStamp
+    }]
+  });
+
+  const customerStamp = CustomerStamp.create({
+    ammount, CustomerId, RewardId,
+    Reward: { idR, is_active, stamp_ammount_needed, max_use_ammount, expires }
+  },
+    {
+      include: [{
+        model: Reward
+      }]
     });
+
   res.json({
-    result: data,
+    result: ammount,
   });
 });
 
