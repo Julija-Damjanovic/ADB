@@ -118,7 +118,7 @@ router.put("/:id", async (req: request, res: response) => {
     result: data,
   });
 });
-
+/*
 router.delete("/:id", async (req: request, res: response) => {
   const data = await Customer.destroy({
     where: {
@@ -131,7 +131,7 @@ router.delete("/:id", async (req: request, res: response) => {
     result: data,
   });
 });
-
+*/
 
 //deleteRewards(deleteStamps=>RewardId)
 router.delete("/1", async (req: request, res: response) => {
