@@ -22,8 +22,11 @@ const Customer = connection.define(
       type: DataTypes.STRING(64),
     },
   },
+  
   {
     // Other model options go here
+    //soft-delete (deletedAt)
+    //paranoid:true,
   }
 );
 //Customer.sync();
